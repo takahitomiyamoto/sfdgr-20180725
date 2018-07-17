@@ -24,6 +24,18 @@
         <apexClass>BaseTriggerObserver</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>CommonConstants</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CommonErrorUtils</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CommonLogger</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <custom>false</custom>
     <loginIpRanges>
         <endAddress>255.255.255.255</endAddress>
