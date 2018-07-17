@@ -23,6 +23,10 @@ trigger AccountTrigger on Account(
   after undelete
 ) {
 
+  if (BaseTriggerHandler.isRecursive()) {
+    return;
+  }
+
   BaseTriggerHandler handler = new AccountTriggerHandler();
   handler.invoke();
 

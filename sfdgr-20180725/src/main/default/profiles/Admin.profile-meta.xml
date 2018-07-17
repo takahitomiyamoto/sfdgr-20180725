@@ -24,10 +24,6 @@
         <apexClass>BaseTriggerObserver</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <classAccesses>
-        <apexClass>CommonException</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
     <custom>false</custom>
     <loginIpRanges>
         <endAddress>255.255.255.255</endAddress>

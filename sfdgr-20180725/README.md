@@ -10,8 +10,12 @@
     └── main
         ├── common
         │   └── classes
-        │       ├── CommonException.cls
-        │       └── CommonException.cls-meta.xml
+        │       ├── CommonConstants.cls
+        │       ├── CommonConstants.cls-meta.xml
+        │       ├── CommonErrorUtils.cls
+        │       ├── CommonErrorUtils.cls-meta.xml
+        │       ├── CommonLogger.cls
+        │       └── CommonLogger.cls-meta.xml
         ├── default
         │   ├── objects
         │   │   └── User

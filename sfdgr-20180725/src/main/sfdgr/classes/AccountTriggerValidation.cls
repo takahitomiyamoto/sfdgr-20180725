@@ -1,30 +1,38 @@
 public with sharing class AccountTriggerValidation implements BaseTriggerObserver {
 
+  // Custom Exception
+  private class AccountTriggerValidationException extends Exception {}
+
   // Constants
-  private static final System.LoggingLevel LOGGING_LEVEL_DEFAULT = LoggingLevel.DEBUG;  // TODO: カスタム設定で設定
   private static final String CLASS_NAME = AccountTriggerValidation.class.getName();
+  private static final System.loggingLevel LOGGING_LEVEL_DEFAULT = CommonConstants.LOGGING_LEVEL_DEFAULT;
   private static final String ERROR_MESSAGE_PHONE_REQUIRED = AccountConstants.ERROR_MESSAGE_PHONE_REQUIRED;
 
-  private List<Account> oldAccounts;
-  private List<Account> newAccounts;
-  private Map<Id, Account> oldAccountMap;
-  private Map<Id, Account> newAccountMap;
+  // Logger Variable
+  private final CommonLogger logger = CommonLogger.getInstance();
 
-  public AccountTriggerValidation(AccountTriggerHandler accountTriggerHandler) {
-    this.oldAccounts = accountTriggerHandler.oldAccounts;
-    this.newAccounts = accountTriggerHandler.newAccounts;
-    this.oldAccountMap = accountTriggerHandler.oldAccountMap;
-    this.newAccountMap = accountTriggerHandler.newAccountMap;
+  // Class Fields
+  private static String methodName;
+
+  // Instance Fields
+  private AccountTriggerHandler handler;
+
+  public AccountTriggerValidation(AccountTriggerHandler handler) {
+    methodName = 'AccountTriggerValidation';
+
+    this.handler = handler;
   }
 
   public void onBeforeInsert() {
-    System.debug(LoggingLevel.DEBUG, 'AccountTriggerValidation onBeforeInsert');
-    this.validatePhone(newAccounts);
+    methodName = 'onBeforeInsert';
+
+    this.validatePhone(handler.newAccounts);
   }
 
   public void onBeforeUpdate() {
-    System.debug(LoggingLevel.DEBUG, 'AccountTriggerValidation onBeforeUpdate');
-    this.validatePhone(newAccounts);
+    methodName = 'onBeforeUpdate';
+
+    this.validatePhone(handler.newAccounts);
   }
 
   public void onBeforeDelete() {}
@@ -34,16 +42,19 @@ public with sharing class AccountTriggerValidation implements BaseTriggerObserve
   public void onAfterUndelete() {}
 
   private void validatePhone(List<Account> newAccounts) {
+    methodName = 'validatePhone';
+
     for (Account a : newAccounts) {
       Boolean hasFax = String.isNotEmpty(a.Fax);
       Boolean hasPhone = String.isNotEmpty(a.Phone);
 
-      System.debug(LoggingLevel.DEBUG, 'hasFax: ' + hasFax);
-      System.debug(LoggingLevel.DEBUG, 'hasPhone: ' + hasPhone);
+      logger.stackDebugLog(LOGGING_LEVEL_DEFAULT, CLASS_NAME, methodName, 'hasFax: ' + hasFax);
+      logger.stackDebugLog(LOGGING_LEVEL_DEFAULT, CLASS_NAME, methodName, 'hasPhone: ' + hasPhone);
 
       if (hasFax && !hasPhone) {
         // a.addError(ERROR_MESSAGE_PHONE_REQUIRED);
         a.Phone.addError(ERROR_MESSAGE_PHONE_REQUIRED);
+        throw new AccountTriggerValidationException(ERROR_MESSAGE_PHONE_REQUIRED);
       }
     }
   }

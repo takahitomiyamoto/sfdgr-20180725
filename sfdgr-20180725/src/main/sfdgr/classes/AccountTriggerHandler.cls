@@ -1,5 +1,19 @@
 public without sharing class AccountTriggerHandler extends BaseTriggerHandler {
 
+  // Custom Exception
+  private class AccountTriggerHandlerException extends Exception {}
+
+  // Constants
+  private static final String CLASS_NAME = AccountTriggerHandler.class.getName();
+  private static final System.loggingLevel LOGGING_LEVEL_DEFAULT = CommonConstants.LOGGING_LEVEL_DEFAULT;
+
+  // Logger Variable
+  private final CommonLogger logger = CommonLogger.getInstance();
+
+  // Class Fields
+  private static String methodName;
+
+  // Instance Fields
   public List<Account> oldAccounts;
   public List<Account> newAccounts;
   public Map<Id, Account> oldAccountMap;
@@ -7,9 +21,10 @@ public without sharing class AccountTriggerHandler extends BaseTriggerHandler {
 
   public AccountTriggerHandler() {
     super();
-    System.debug(LoggingLevel.DEBUG, 'Trigger.isExecuting: ' + this.triggerIsExecuting);
-    System.debug(LoggingLevel.DEBUG, 'Trigger.size: ' + this.triggerSize);
-    System.debug(LoggingLevel.DEBUG, 'Trigger.TriggerOperation: ' + this.TriggerOperationType);
+    methodName = 'AccountTriggerHandler';
+    logger.stackDebugLog(LOGGING_LEVEL_DEFAULT, CLASS_NAME, methodName, 'Trigger.isExecuting: ' + this.triggerIsExecuting);
+    logger.stackDebugLog(LOGGING_LEVEL_DEFAULT, CLASS_NAME, methodName, 'Trigger.size: ' + this.triggerSize);
+    logger.stackDebugLog(LOGGING_LEVEL_DEFAULT, CLASS_NAME, methodName, 'Trigger.TriggerOperation: ' + this.TriggerOperationType);
     this.oldAccounts = (List<Account>)this.oldObjects;
     this.newAccounts = (List<Account>)this.newObjects;
     this.oldAccountMap = (Map<Id, Account>)this.oldObjectMap;
@@ -17,7 +32,9 @@ public without sharing class AccountTriggerHandler extends BaseTriggerHandler {
   }
 
   protected override void addObservers() {
-    // 要件1. 　新規登録時に取引先名(Name)項目の先頭に[サンプル]という文字列を付ける。
+    methodName = 'addObservers';
+
+     // 要件1. 　新規登録時に取引先名(Name)項目の先頭に[サンプル]という文字列を付ける。
     System.TriggerOperation[] activeTriggerOperation1 = new System.TriggerOperation[]{};
     activeTriggerOperation1.add(System.TriggerOperation.BEFORE_INSERT);
     this.addObserver(activeTriggerOperation1, (BaseTriggerObserver)new AccountTriggerService(this));
@@ -28,37 +45,5 @@ public without sharing class AccountTriggerHandler extends BaseTriggerHandler {
     activeTriggerOperation2.add(System.TriggerOperation.BEFORE_UPDATE);
     this.addObserver(activeTriggerOperation2, (BaseTriggerObserver)new AccountTriggerValidation(this));
   }
-
-  protected override void onBeforeInsert() {
-    System.debug(LoggingLevel.DEBUG, 'AccountTriggerHandler onBeforeInsert');
-
-    System.debug(LoggingLevel.DEBUG, 'firstRun: ' + firstRun);
-    if (!firstRun) {
-      return;
-    }
-
-    for (BaseTriggerObserver triggerObserver : beforeInsertObservers) {
-      triggerObserver.onBeforeInsert();
-    }
-  }
-
-  protected override void onBeforeUpdate() {
-    System.debug(LoggingLevel.DEBUG, 'AccountTriggerHandler onBeforeUpdate');
-
-    System.debug(LoggingLevel.DEBUG, 'firstRun: ' + firstRun);
-    if (!firstRun) {
-      return;
-    }
-
-    for (BaseTriggerObserver triggerObserver : beforeUpdateObservers) {
-      triggerObserver.onBeforeUpdate();
-    }
-  }
-
-  protected override void onBeforeDelete() {}
-  protected override void onAfterInsert() {}
-  protected override void onAfterUpdate() {}
-  protected override void onAfterDelete() {}
-  protected override void onAfterUndelete() {}
 
 }
