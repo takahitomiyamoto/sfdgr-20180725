@@ -1,7 +1,7 @@
 public without sharing class AccountTriggerHandler extends BaseTriggerHandler {
 
   // Custom Exception
-  private class AccountTriggerHandlerException extends Exception {}
+  private class CommonException extends Exception {}
 
   // Constants
   private static final String CLASS_NAME = AccountTriggerHandler.class.getName();

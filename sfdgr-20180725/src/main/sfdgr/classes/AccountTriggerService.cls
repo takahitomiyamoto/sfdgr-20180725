@@ -1,7 +1,7 @@
 public with sharing class AccountTriggerService implements BaseTriggerObserver {
 
   // Custom Exception
-  private class AccountTriggerServiceException extends Exception {}
+  private class CommonException extends Exception {}
 
   // Constants
   private static final String CLASS_NAME = AccountTriggerService.class.getName();

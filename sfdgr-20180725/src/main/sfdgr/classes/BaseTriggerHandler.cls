@@ -1,7 +1,7 @@
 public abstract class BaseTriggerHandler {
 
   // Custom Exception
-  private class BaseTriggerHandlerException extends Exception {}
+  private class CommonException extends Exception {}
 
   // Constants
   private static final String CLASS_NAME = BaseTriggerHandler.class.getName();
@@ -43,11 +43,12 @@ public abstract class BaseTriggerHandler {
     this.triggerOperationType = Trigger.operationType;
   }
 
-  public static Boolean isRecursive() {
-    System.debug(LOGGING_LEVEL_DEFAULT, 'firstRun: ' + BaseTriggerHandler.firstRun);
+  public Boolean isRecursive() {
+    methodName = 'isRecursive';
+    logger.stackDebugLog(LOGGING_LEVEL_DEFAULT, CLASS_NAME, methodName, 'firstRun: ' + BaseTriggerHandler.firstRun);
 
     if (BaseTriggerHandler.firstRun) {
-      BaseTriggerHandler.firstRun = false;
+      // BaseTriggerHandler.firstRun = false;
       return false;
     } else {
       return true;
@@ -57,8 +58,13 @@ public abstract class BaseTriggerHandler {
   public void invoke() {
     methodName = 'invoke';
 
+
     System.Savepoint savepoint = System.Database.setSavepoint();
     try {
+      if (this.isRecursive()) {
+        return;
+      }
+
       this.addObservers();
 
       switch on Trigger.operationType {
@@ -73,16 +79,20 @@ public abstract class BaseTriggerHandler {
         }
         when AFTER_INSERT {
           this.onAfterInsert();
+          BaseTriggerHandler.firstRun = false;
         }
         when AFTER_UPDATE {
           this.onAfterUpdate();
+          BaseTriggerHandler.firstRun = false;
         }
         when AFTER_DELETE {
           this.onAfterDelete();
+          BaseTriggerHandler.firstRun = false;
         }
         // AFTER_UNDELETE
         when else {
           this.onAfterUndelete();
+          BaseTriggerHandler.firstRun = false;
         }
       }
     } catch (Exception e) {

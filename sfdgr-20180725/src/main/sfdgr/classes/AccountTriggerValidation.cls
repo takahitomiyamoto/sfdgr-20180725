@@ -1,7 +1,7 @@
 public with sharing class AccountTriggerValidation implements BaseTriggerObserver {
 
   // Custom Exception
-  private class AccountTriggerValidationException extends Exception {}
+  private class CommonException extends Exception {}
 
   // Constants
   private static final String CLASS_NAME = AccountTriggerValidation.class.getName();
@@ -54,7 +54,7 @@ public with sharing class AccountTriggerValidation implements BaseTriggerObserve
       if (hasFax && !hasPhone) {
         // a.addError(ERROR_MESSAGE_PHONE_REQUIRED);
         a.Phone.addError(ERROR_MESSAGE_PHONE_REQUIRED);
-        throw new AccountTriggerValidationException(ERROR_MESSAGE_PHONE_REQUIRED);
+        throw new CommonException(ERROR_MESSAGE_PHONE_REQUIRED);
       }
     }
   }
