@@ -1,3 +1,7 @@
+/**************************************************
+ * Name: BaseTriggerHandler.cls
+ * Description: Base class for all triggers
+ **************************************************/
 public abstract class BaseTriggerHandler {
 
   // Custom Exception
@@ -10,11 +14,11 @@ public abstract class BaseTriggerHandler {
   // Logger Variable
   private final CommonLogger logger = CommonLogger.getInstance();
 
-  // Class Fields
+  // Class Variables
   private static String methodName;
   public static Boolean firstRun = true;
 
-  // Instance Fields
+  // Instance Variables
   protected List<SObject> oldObjects;
   protected List<SObject> newObjects;
   protected Map<Id, SObject> oldObjectMap;
@@ -29,8 +33,17 @@ public abstract class BaseTriggerHandler {
   protected List<BaseTriggerObserver> afterUpdateObservers = new List<BaseTriggerObserver>();
   protected List<BaseTriggerObserver> afterDeleteObservers = new List<BaseTriggerObserver>();
   protected List<BaseTriggerObserver> afterUndeleteObservers = new List<BaseTriggerObserver>();
+
+  // Abstract Methods
   protected abstract void addObservers();
 
+  /**************************************************
+   * Name: BaseTriggerHandler
+   * Description: Constructor with no parameter
+   *
+   * @param  none
+   * @return BaseTriggerHandler
+   **************************************************/
   public BaseTriggerHandler() {
     methodName = 'BaseTriggerHandler';
 
@@ -43,21 +56,33 @@ public abstract class BaseTriggerHandler {
     this.triggerOperationType = Trigger.operationType;
   }
 
+  /************************************************************
+   * Name: isRecursive
+   * Description: Validate whether this is recursive or not
+   *
+   * @param  none
+   * @return Boolean
+   ************************************************************/
   public Boolean isRecursive() {
     methodName = 'isRecursive';
     logger.stackDebugLog(LOGGING_LEVEL_DEFAULT, CLASS_NAME, methodName, 'firstRun: ' + BaseTriggerHandler.firstRun);
 
     if (BaseTriggerHandler.firstRun) {
-      // BaseTriggerHandler.firstRun = false;
       return false;
     } else {
       return true;
     }
   }
 
+  /********************************************************************************
+   * Name: invoke
+   * Description: Invoke each custom action depending on the Apex DML operations
+   *
+   * @param  none
+   * @return void
+   ********************************************************************************/
   public void invoke() {
     methodName = 'invoke';
-
 
     System.Savepoint savepoint = System.Database.setSavepoint();
     try {
@@ -103,6 +128,14 @@ public abstract class BaseTriggerHandler {
     }
   }
 
+  /************************************************************
+   * Name: addObserver
+   * Description: Add an observer
+   *
+   * @param  List<System.TriggerOperation> triggerOperations
+   * @param  BaseTriggerObserver triggerObserver
+   * @return void
+   ************************************************************/
   public void addObserver(List<System.TriggerOperation> triggerOperations, BaseTriggerObserver triggerObserver){
     methodName = 'addObserver';
 
@@ -134,6 +167,13 @@ public abstract class BaseTriggerHandler {
     }
   }
 
+  /*******************************************************
+   * Name: onBeforeInsert
+   * Description: Custom action in case of before insert
+   *
+   * @param  null
+   * @return void
+   ********************************************************/
   private void onBeforeInsert() {
     methodName = 'onBeforeInsert';
     logger.stackDebugLog(LOGGING_LEVEL_DEFAULT, CLASS_NAME, methodName, 'beforeInsertObservers: ' + beforeInsertObservers.size());
@@ -143,6 +183,13 @@ public abstract class BaseTriggerHandler {
     }
   }
 
+  /*******************************************************
+   * Name: onBeforeUpdate
+   * Description: Custom action in case of before update
+   *
+   * @param  null
+   * @return void
+   ********************************************************/
   private void onBeforeUpdate() {
     methodName = 'onBeforeUpdate';
     logger.stackDebugLog(LOGGING_LEVEL_DEFAULT, CLASS_NAME, methodName, 'beforeUpdateObservers: ' + beforeUpdateObservers.size());
@@ -152,6 +199,13 @@ public abstract class BaseTriggerHandler {
     }
   }
 
+  /*******************************************************
+   * Name: onBeforeDelete
+   * Description: Custom action in case of before delete
+   *
+   * @param  null
+   * @return void
+   ********************************************************/
   private void onBeforeDelete() {
     methodName = 'onBeforeDelete';
     logger.stackDebugLog(LOGGING_LEVEL_DEFAULT, CLASS_NAME, methodName, 'beforeDeleteObservers: ' + beforeDeleteObservers.size());
@@ -161,6 +215,13 @@ public abstract class BaseTriggerHandler {
     }
   }
 
+  /*******************************************************
+   * Name: onAfterInsert
+   * Description: Custom action in case of after insert
+   *
+   * @param  null
+   * @return void
+   ********************************************************/
   private void onAfterInsert() {
     methodName = 'onAfterInsert';
     logger.stackDebugLog(LOGGING_LEVEL_DEFAULT, CLASS_NAME, methodName, 'afterInsertObservers: ' + afterInsertObservers.size());
@@ -170,6 +231,13 @@ public abstract class BaseTriggerHandler {
     }
   }
 
+  /*******************************************************
+   * Name: onAfterUpdate
+   * Description: Custom action in case of after update
+   *
+   * @param  null
+   * @return void
+   ********************************************************/
   private void onAfterUpdate() {
     methodName = 'onAfterUpdate';
     logger.stackDebugLog(LOGGING_LEVEL_DEFAULT, CLASS_NAME, methodName, 'afterUpdateObservers: ' + afterUpdateObservers.size());
@@ -179,6 +247,14 @@ public abstract class BaseTriggerHandler {
     }
   }
 
+  /*******************************************************
+   * Name: onAfterDelete
+   * Description: Custom action in case of after delete
+   *
+   * @param  null
+   * @return void
+   * @deprecated
+   ********************************************************/
   private void onAfterDelete() {
     methodName = 'onAfterDelete';
     logger.stackDebugLog(LOGGING_LEVEL_DEFAULT, CLASS_NAME, methodName, 'afterDeleteObservers: ' + afterDeleteObservers.size());
@@ -188,6 +264,14 @@ public abstract class BaseTriggerHandler {
     }
   }
 
+  /*******************************************************
+   * Name: onAfterUndelete
+   * Description: Custom action in case of after undelete
+   *
+   * @param  null
+   * @return void
+   * @deprecated
+   ********************************************************/
   private void onAfterUndelete() {
     methodName = 'onAfterUndelete';
     logger.stackDebugLog(LOGGING_LEVEL_DEFAULT, CLASS_NAME, methodName, 'afterUndeleteObservers: ' + afterUndeleteObservers.size());

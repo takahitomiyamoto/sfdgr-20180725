@@ -10,8 +10,6 @@
  * @param  after delete
  * @param  after undelete
  * @return none
- *
- * @since  2018/07/16
  ***********************************/
 trigger AccountTrigger on Account(
   before insert,

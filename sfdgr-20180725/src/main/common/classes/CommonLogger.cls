@@ -1,12 +1,12 @@
-/************************************
+/***********************************
  * Name: CommonLogger.cls
  * Description: Common logger class
  ***********************************/
 public without sharing class CommonLogger {
 
   // Constants
-  private static final String CLASS_NAME = CommonLogger.class.getName();
   private static final System.loggingLevel LOGGING_LEVEL_DEFAULT = CommonConstants.LOGGING_LEVEL_DEFAULT;
+  private static final String CLASS_NAME = CommonLogger.class.getName();
   private static final String DATE_FORMAT = CommonConstants.DATE_FORMAT;
   private static final String MSG_NEW_INSTANCE_CREATED = CommonConstants.MSG_NEW_INSTANCE_CREATED;
   private static final String PARTING_LINE = CommonConstants.PARTING_LINE;
@@ -17,10 +17,10 @@ public without sharing class CommonLogger {
   private static final String TIMEZONE_JST = CommonConstants.TIMEZONE_JST;
   private static final Integer MAX_WIDTH = CommonConstants.MAX_WIDTH;
 
-  // Class Fields
+  // Class Variables
   private static CommonLogger singletonCommonLogger = new CommonLogger();
 
-  // Instance Fields
+  // Instance Variables
   private List<String> debuglogs = new List<String>();
   private String timestampNow;
 
@@ -63,13 +63,9 @@ public without sharing class CommonLogger {
     // ログレベルが高ければ出力する
     if (loggingLevel.ordinal() >= labelLoggingLevel.ordinal()) {
       String debugLog = '' +
-        String.valueOf(loggingLevel) +
-        SYMBOL_SPACE +
-        className +
-        SYMBOL_CLS +
-        SYMBOL_SPACE +
-        methodName +
-        SYMBOL_SPACE +
+        String.valueOf(loggingLevel) + SYMBOL_SPACE +
+        className + SYMBOL_CLS + SYMBOL_SPACE +
+        methodName + SYMBOL_SPACE +
         msg;
 
       this.debuglogs.add(debugLog);
@@ -87,9 +83,9 @@ public without sharing class CommonLogger {
     if (this.debuglogs.size() == 0) {
       return;
     }
+
     String log = '' +
-      this.timestampNow +
-      SYMBOL_NEWLINE +
+      this.timestampNow + SYMBOL_NEWLINE +
       String.join(this.debuglogs, SYMBOL_NEWLINE);
 
     Boolean isLong = (log.length() > MAX_WIDTH);
@@ -106,7 +102,7 @@ public without sharing class CommonLogger {
 
   /***********************************
    * Name: getLoggingLevel
-   * Description: get LoggingLevel
+   * Description: Get LoggingLevel
    *
    * @param  String value
    * @return System.LoggingLevel

@@ -2,7 +2,13 @@
  * Name: CommonConstants.cls
  * Description: Common constants
  ***********************************/
-public class CommonConstants {
+public without sharing class CommonConstants {
+
+  // CommonErrorUtils
+  public static final String DEBUG_MESSAGE_FIELDS = 'Fields: ';
+  public static final String DEBUG_MESSAGE_STATUS_CODE = 'StatusCode: ';
+  public static final String DEBUG_MESSAGE_MESSAGE = 'Message: ';
+  public static final String DEBUG_MESSAGE_TYPE = 'Type: ';
 
   // CommonLogger
   public static final System.loggingLevel LOGGING_LEVEL_DEFAULT = System.LoggingLevel.DEBUG;

@@ -6,13 +6,17 @@ public without sharing class CommonErrorUtils {
 
   // Constants
   private static final String SYMBOL_NEWLINE = CommonConstants.SYMBOL_NEWLINE;
+  private static final String DEBUG_MESSAGE_FIELDS = CommonConstants.DEBUG_MESSAGE_FIELDS;
+  private static final String DEBUG_MESSAGE_STATUS_CODE = CommonConstants.DEBUG_MESSAGE_STATUS_CODE;
+  private static final String DEBUG_MESSAGE_MESSAGE = CommonConstants.DEBUG_MESSAGE_MESSAGE;
+  private static final String DEBUG_MESSAGE_TYPE = CommonConstants.DEBUG_MESSAGE_TYPE;
 
-  // Class Fields
+  // Class Variables
   private static String methodName;
 
   /************************************************************
    * Name: createErrorMessage
-   * Description: create Error Message from Database.Error
+   * Description: Create Error Message from Database.Error
    *
    * @param  Database.Error error
    * @return String
@@ -21,22 +25,16 @@ public without sharing class CommonErrorUtils {
     methodName = 'createErrorMessage';
 
     String errorMessage = '' +
-      'Fields: ' +
-      error.getFields() +
-      SYMBOL_NEWLINE +
-      'StatusCode: ' +
-      error.getStatusCode() +
-      SYMBOL_NEWLINE +
-      'Message: ' +
-      error.getMessage() +
-      SYMBOL_NEWLINE;
+      DEBUG_MESSAGE_FIELDS + error.getFields() + SYMBOL_NEWLINE +
+      DEBUG_MESSAGE_STATUS_CODE + error.getStatusCode() + SYMBOL_NEWLINE +
+      DEBUG_MESSAGE_MESSAGE + error.getMessage() + SYMBOL_NEWLINE;
 
     return errorMessage;
   }
 
   /*******************************************************
    * Name: createErrorMessage
-   * Description: create Error Message from Exception
+   * Description: Create Error Message from Exception
    *
    * @param  Exception e
    * @return String
@@ -45,12 +43,8 @@ public without sharing class CommonErrorUtils {
     methodName = 'createErrorMessage';
 
     String errorMessage = '' +
-      SYMBOL_NEWLINE +
-      'Type: ' +
-      e.getTypeName() +
-      SYMBOL_NEWLINE +
-      'Message: ' +
-      e.getMessage();
+      DEBUG_MESSAGE_TYPE + e.getTypeName() + SYMBOL_NEWLINE +
+      DEBUG_MESSAGE_MESSAGE + e.getMessage() + SYMBOL_NEWLINE;
 
     return errorMessage;
   }

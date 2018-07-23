@@ -1,24 +1,35 @@
+/**************************************************
+ * Name: AccountTriggerHandler.cls
+ * Description: Handler class for Account trigger
+ **************************************************/
 public without sharing class AccountTriggerHandler extends BaseTriggerHandler {
 
   // Custom Exception
   private class CommonException extends Exception {}
 
   // Constants
-  private static final String CLASS_NAME = AccountTriggerHandler.class.getName();
   private static final System.loggingLevel LOGGING_LEVEL_DEFAULT = CommonConstants.LOGGING_LEVEL_DEFAULT;
+  private static final String CLASS_NAME = AccountTriggerHandler.class.getName();
 
   // Logger Variable
   private final CommonLogger logger = CommonLogger.getInstance();
 
-  // Class Fields
+  // Class Variables
   private static String methodName;
 
-  // Instance Fields
+  // Instance Variables
   public List<Account> oldAccounts;
   public List<Account> newAccounts;
   public Map<Id, Account> oldAccountMap;
   public Map<Id, Account> newAccountMap;
 
+  /*********************************************
+   * Name: AccountTriggerHandler
+   * Description: Constructor with no parameter
+   *
+   * @param  null
+   * @return AccountTriggerHandler
+   *********************************************/
   public AccountTriggerHandler() {
     super();
     methodName = 'AccountTriggerHandler';
@@ -31,19 +42,26 @@ public without sharing class AccountTriggerHandler extends BaseTriggerHandler {
     this.newAccountMap = (Map<Id, Account>)this.newObjectMap;
   }
 
+  /*******************************
+   * Name: addObservers
+   * Description: Add observers
+   *
+   * @param  null
+   * @return void
+   *******************************/
   protected override void addObservers() {
     methodName = 'addObservers';
 
-     // 要件1. 　新規登録時に取引先名(Name)項目の先頭に[サンプル]という文字列を付ける。
+     // 要件1. 新規登録時
     System.TriggerOperation[] activeTriggerOperation1 = new System.TriggerOperation[]{};
     activeTriggerOperation1.add(System.TriggerOperation.BEFORE_INSERT);
-    this.addObserver(activeTriggerOperation1, (BaseTriggerObserver)new AccountTriggerService(this));
+    this.addObserver(activeTriggerOperation1, (BaseTriggerObserver)AccountTriggerService.getInstance(this));
 
-    // 要件2. 　新規登録または更新時にFax(FAX)項目に値が入っており、かつ電話(Phone)項目に値が入っていない場合は「FAXが入っている場合は電話番号も入力してください」というエラーにする。
+    // 要件2. 新規登録または更新時
     System.TriggerOperation[] activeTriggerOperation2 = new System.TriggerOperation[]{};
     activeTriggerOperation2.add(System.TriggerOperation.BEFORE_INSERT);
     activeTriggerOperation2.add(System.TriggerOperation.BEFORE_UPDATE);
-    this.addObserver(activeTriggerOperation2, (BaseTriggerObserver)new AccountTriggerValidation(this));
+    this.addObserver(activeTriggerOperation2, (BaseTriggerObserver)AccountTriggerValidation.getInstance(this));
   }
 
 }

@@ -1,3 +1,7 @@
+/*******************************************************
+ * Name: BaseTriggerObserver.cls
+ * Description: Interface for all trigger observers
+ *******************************************************/
 public interface BaseTriggerObserver {
   void onBeforeInsert();
   void onBeforeUpdate();
